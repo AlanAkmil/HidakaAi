@@ -1,0 +1,2 @@
+# HidakaAi
+Web Ai pertama
