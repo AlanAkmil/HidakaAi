@@ -1,225 +1,700 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hidaka Stream | Xiao ye Masterpiece</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<title>HidakaStream | Donghua Only</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#0c0c0c;--surface:#161616;--card:#1e1e1e;--card2:#252525;
+  --border:#2a2a2a;--border2:#333;
+  --gold:#d4a843;--gold2:#f0c060;--gold-dim:#7a5820;--gold-bg:#1a1408;
+  --text:#f0f0f0;--text2:#b0b0b0;--muted:#666;
+  --radius:12px;--radius-sm:8px;--nav-h:60px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:2px}
 
-        :root {
-            --bg-color: #0b0510;
-            --surface-color: rgba(26, 11, 46, 0.6);
-            --primary-accent: #9333ea;
-            --primary-glow: rgba(147, 51, 234, 0.5);
-            --text-main: #f3e8ff;
-            --text-muted: #c084fc;
-        }
+/* ── TOPNAV ── */
+#topnav{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav-h);
+  background:var(--bg);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.logo{font-family:'Cinzel',serif;font-size:17px;font-weight:700;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px}
+.logo-sub{font-size:9px;color:var(--muted);font-family:'Inter',sans-serif;
+  -webkit-text-fill-color:var(--muted);display:block;margin-top:-2px;letter-spacing:1px}
+.icon-btn{background:var(--card);border:1px solid var(--border);border-radius:50%;
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.icon-btn svg{width:16px;height:16px;stroke:var(--text2);fill:none;stroke-width:2}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+/* ── BOTNAV ── */
+#botnav{position:fixed;bottom:0;left:0;right:0;z-index:200;height:var(--nav-h);
+  background:var(--surface);border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-around;padding:0 2px}
+.bnav{display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:5px 4px;cursor:pointer;color:var(--muted);font-size:8.5px;font-weight:500;
+  border:none;background:none;transition:color .2s;flex:1;min-width:0}
+.bnav svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8}
+.bnav.active{color:var(--gold)}
+.bnav.active svg{stroke:var(--gold)}
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            background-image: radial-gradient(circle at top, #2b1055 0%, transparent 40%);
-            background-attachment: fixed;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+/* ── APP ── */
+#app{padding-top:var(--nav-h);padding-bottom:calc(var(--nav-h)+6px);min-height:100vh}
+.section{display:none}.section.active{display:block}
 
-        /* --- Header & Nav --- */
-        header {
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(11, 5, 16, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(147, 51, 234, 0.2);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+/* ══════════════════════════════════════
+   SHARED COMPONENTS
+══════════════════════════════════════ */
+.sh{display:flex;align-items:center;justify-content:space-between;padding:18px 16px 10px}
+.sh-title{font-size:16px;font-weight:700;color:var(--text)}
+.sh-more{font-size:12px;color:var(--gold);cursor:pointer;background:none;border:none}
+.gline{height:1px;background:linear-gradient(to right,transparent,var(--gold-dim),transparent);margin:4px 0}
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #fff;
-            text-shadow: 0 0 15px var(--primary-glow);
-            letter-spacing: 2px;
-            animation: pulse 2s infinite;
-        }
+/* Hero Slider */
+.hero-wrap{position:relative;width:100%;height:230px;overflow:hidden;background:#111}
+.hero-track{display:flex;height:100%;transition:transform .4s ease}
+.hero-slide{flex:0 0 100%;position:relative;overflow:hidden}
+.hero-img{width:100%;height:100%;object-fit:cover;opacity:.65}
+.hero-overlay{position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 15%,rgba(12,12,12,.97) 100%);
+  display:flex;flex-direction:column;justify-content:flex-end;padding:14px 16px}
+.hero-badge{display:inline-flex;align-items:center;gap:4px;background:var(--gold);
+  color:#000;font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;
+  margin-bottom:5px;width:fit-content}
+.hero-title{font-size:19px;font-weight:700;color:#fff;margin-bottom:5px;line-height:1.2}
+.hero-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text2)}
+.hero-status{background:#1a3a1a;color:#4caf50;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.hero-dots{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);display:flex;gap:4px;z-index:2}
+.hero-dot{width:5px;height:5px;border-radius:50%;background:#fff3;transition:all .3s;cursor:pointer}
+.hero-dot.active{width:16px;border-radius:3px;background:var(--gold)}
 
-        /* --- Main Content --- */
-        main {
-            padding: 40px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+/* Continue Watching */
+.cw-scroll{display:flex;gap:10px;padding:0 16px;overflow-x:auto;scrollbar-width:none}
+.cw-scroll::-webkit-scrollbar{display:none}
+.cw-card{flex:0 0 155px;border-radius:var(--radius);overflow:hidden;background:var(--card);
+  border:1px solid var(--border);cursor:pointer;position:relative}
+.cw-card:active{opacity:.85}
+.cw-thumb{width:100%;height:88px;object-fit:cover;display:block;background:var(--border)}
+.cw-bar{position:absolute;bottom:88px;left:0;right:0;height:3px;background:#fff1}
+.cw-prog{height:100%;background:var(--gold);width:35%}
+.cw-info{padding:7px 8px}
+.cw-ep{font-size:10px;color:var(--gold);font-weight:600;margin-bottom:2px}
+.cw-title{font-size:11px;font-weight:500;color:var(--text);display:-webkit-box;
+  -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
 
-        h2.section-title {
-            font-size: 2rem;
-            margin-bottom: 30px;
-            border-left: 5px solid var(--primary-accent);
-            padding-left: 15px;
-            animation: slideIn 0.5s ease-out;
-        }
+/* Episode Scroll */
+.ep-scroll{display:flex;gap:10px;padding:0 16px;overflow-x:auto;scrollbar-width:none}
+.ep-scroll::-webkit-scrollbar{display:none}
+.ep-card{flex:0 0 110px;cursor:pointer}.ep-card:active{opacity:.85}
+.ep-thumb-wrap{position:relative;border-radius:var(--radius-sm);overflow:hidden;width:110px;height:150px;background:var(--border)}
+.ep-thumb{width:100%;height:100%;object-fit:cover;display:block}
+.ep-overlay{position:absolute;bottom:0;left:0;right:0;padding:5px;background:linear-gradient(transparent,rgba(0,0,0,.88))}
+.ep-num{font-size:10px;font-weight:700;color:#fff}
+.ep-new{position:absolute;top:5px;left:5px;background:var(--gold);color:#000;font-size:8px;font-weight:700;padding:2px 5px;border-radius:4px}
+.ep-title{font-size:11px;color:var(--text2);margin-top:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
 
-        /* --- Grid & Cards --- */
-        .donghua-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 25px;
-        }
+/* Grid 3 */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 16px}
+.gc{cursor:pointer}.gc:active{opacity:.85}
+.gc-wrap{position:relative;border-radius:var(--radius-sm);overflow:hidden;width:100%;aspect-ratio:2/3;background:var(--border)}
+.gc-img{width:100%;height:100%;object-fit:cover;display:block}
+.gc-overlay{position:absolute;bottom:0;left:0;right:0;padding:5px;background:linear-gradient(transparent,rgba(0,0,0,.88))}
+.gc-eps{font-size:10px;font-weight:700;color:#fff}
+.gc-badge{position:absolute;top:5px;left:5px;background:var(--gold);color:#000;font-size:8px;font-weight:700;padding:2px 5px;border-radius:4px}
+.gc-title{font-size:11px;color:var(--text2);margin-top:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
 
-        .card {
-            background: var(--surface-color);
-            border: 1px solid rgba(147, 51, 234, 0.1);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            position: relative;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.6s forwards;
-        }
+/* Popular List */
+.pop-list{display:flex;flex-direction:column;gap:8px;padding:0 16px}
+.pop-item{display:flex;gap:12px;align-items:center;padding:10px;background:var(--card);
+  border-radius:var(--radius);border:1px solid var(--border);cursor:pointer}
+.pop-item:active{border-color:var(--gold-dim)}
+.pop-rank{font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--border2);min-width:30px;text-align:center}
+.pop-rank.t{color:var(--gold-dim)}
+.pop-img{width:46px;height:64px;object-fit:cover;border-radius:6px;background:var(--border);flex-shrink:0}
+.pop-info{flex:1;min-width:0}
+.pop-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pop-meta{display:flex;gap:6px;align-items:center}
+.pop-ep{font-size:11px;color:var(--muted)}
+.pop-tag{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
+.pop-tag.on{background:#0d2b0d;color:#4caf50}
 
-        .card:hover {
-            transform: translateY(-10px) scale(1.03);
-            box-shadow: 0 15px 25px var(--primary-glow);
-            border-color: var(--primary-accent);
-        }
+/* Pagination */
+.pagination{display:flex;justify-content:center;gap:10px;padding:16px}
+.page-btn{padding:8px 20px;border-radius:var(--radius-sm);background:var(--card);
+  border:1px solid var(--border);color:var(--text2);font-size:13px;cursor:pointer}
+.page-btn:disabled{opacity:.3;cursor:default}
 
-        .card-img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
+/* Tabs */
+.tab-row{display:flex;gap:8px;padding:0 16px 12px;overflow-x:auto;scrollbar-width:none}
+.tab-row::-webkit-scrollbar{display:none}
+.tab-pill{padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;
+  cursor:pointer;border:1px solid var(--border);background:var(--card);
+  color:var(--muted);transition:all .2s;white-space:nowrap;flex-shrink:0}
+.tab-pill.active{background:var(--gold);color:#000;border-color:var(--gold)}
 
-        .card:hover .card-img {
-            transform: scale(1.1);
-        }
+/* ══════════════════════════════════════
+   SEARCH & JADWAL
+══════════════════════════════════════ */
+.search-bar{padding:14px 16px;display:flex;gap:10px}
+.s-input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:11px 14px;color:var(--text);font-size:14px;font-family:'Inter',sans-serif;outline:none}
+.s-input:focus{border-color:var(--gold-dim)}
+.s-input::placeholder{color:var(--muted)}
+.s-btn{background:var(--gold);border:none;border-radius:var(--radius);
+  padding:11px 16px;color:#000;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap}
 
-        .img-container {
-            overflow: hidden;
-            position: relative;
-        }
+.sch-wrap{padding:0 16px}
+.day-tabs-scroll{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:10px}
+.day-tabs-scroll::-webkit-scrollbar{display:none}
+.day-tab{flex:0 0 auto;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;
+  cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--muted);transition:all .2s}
+.day-tab.active{background:var(--gold);color:#000;border-color:var(--gold)}
+.sch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 
-        .episode-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--primary-accent);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            z-index: 2;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        }
+/* ══════════════════════════════════════
+   DETAIL & WATCH PAGE
+══════════════════════════════════════ */
+#detail-page{display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto}
+#detail-page.open{display:block}
+.dp-back{position:sticky;top:0;z-index:10;background:#0c0c0ccc;backdrop-filter:blur(10px);
+  padding:11px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.back-btn{background:var(--card);border:1px solid var(--border);border-radius:50%;
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.back-btn svg{width:16px;height:16px;stroke:var(--text);fill:none;stroke-width:2}
+.dp-banner{width:100%;height:240px;position:relative;overflow:hidden}
+.dp-banner-img{width:100%;height:100%;object-fit:cover}
+.dp-banner::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,12,12,.2),var(--bg))}
+.dp-content{padding:0 16px 24px}
+.dp-row{display:flex;gap:14px;margin-top:-50px;position:relative;z-index:2}
+.dp-poster{width:86px;height:122px;object-fit:cover;border-radius:var(--radius);border:2px solid var(--gold-dim);flex-shrink:0;background:var(--border)}
+.dp-meta{padding-top:52px;flex:1;min-width:0}
+.dp-title{font-size:16px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:7px}
+.dp-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px}
+.dp-tag{padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600;background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-dim)}
+.dp-stats{display:flex;gap:12px;flex-wrap:wrap}
+.dp-stat{font-size:11px;color:var(--muted)}
+.dp-stat strong{color:var(--gold);font-weight:600}
+.dp-synopsis{font-size:13px;line-height:1.7;color:var(--text2);margin:14px 0;padding:12px 14px;background:var(--card);border-radius:var(--radius);border-left:3px solid var(--gold-dim)}
+.ep-list-hd{font-size:14px;font-weight:700;color:var(--text);margin:16px 0 10px;display:flex;align-items:center;gap:8px}
+.ep-list-hd span{font-size:12px;color:var(--muted);font-weight:400}
+.ep-list{display:flex;flex-direction:column;gap:6px}
+.ep-row{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;
+  background:var(--card);border-radius:var(--radius-sm);border:1px solid var(--border);cursor:pointer}
+.ep-row:active{border-color:var(--gold-dim)}
+.ep-row-num{font-size:13px;font-weight:700;color:var(--gold);min-width:52px}
+.ep-row-title{font-size:12px;color:var(--text);flex:1}
+.ep-row-date{font-size:10px;color:var(--muted);margin-left:6px;flex-shrink:0}
+.ep-row-arr{color:var(--muted);font-size:18px}
 
-        .card-info {
-            padding: 15px;
-            background: linear-gradient(to top, var(--surface-color) 0%, transparent 100%);
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            backdrop-filter: blur(5px);
-        }
+#watch-page{display:none;position:fixed;inset:0;z-index:400;background:#000;overflow-y:auto}
+#watch-page.open{display:block}
+.wp-back{position:sticky;top:0;z-index:10;background:#000c;backdrop-filter:blur(8px);
+  padding:10px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #222}
+#player-wrap{width:100%;aspect-ratio:16/9;background:#111}
+#player-frame{width:100%;height:100%;border:none;display:block}
+.wp-info{padding:12px 16px 0}
+.wp-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
+.wp-sub{font-size:12px;color:var(--gold)}
+.srv-section{padding:12px 16px}
+.srv-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.srv-list{display:flex;flex-wrap:wrap;gap:7px}
+.srv-btn{padding:7px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);
+  background:var(--card);color:var(--text2);font-size:12px;cursor:pointer;transition:all .2s}
+.srv-btn.active{border-color:var(--gold);color:var(--gold);background:var(--gold-bg)}
+.wp-nav{display:flex;gap:10px;padding:8px 16px 24px}
+.ep-nav-btn{flex:1;padding:11px;border-radius:var(--radius-sm);background:var(--card);
+  border:1px solid var(--border);color:var(--text2);font-size:12px;cursor:pointer;text-align:center}
+.ep-nav-btn:active{border-color:var(--gold-dim)}
+.ep-nav-btn:disabled{opacity:.3;cursor:default}
 
-        .card-title {
-            font-size: 1rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-        }
-
-        /* --- Loading State --- */
-        .loader {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 50vh;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(147, 51, 234, 0.2);
-            border-top-color: var(--primary-accent);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        /* --- Animations --- */
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        @keyframes slideIn { from { transform: translateX(-50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-
-    </style>
+/* ── LOADER / EMPTY / TOAST ── */
+.loader{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;gap:12px}
+.spinner{width:32px;height:32px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--gold);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ldr-txt{font-size:12px;color:var(--muted)}
+.empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px}
+.empty-ico{font-size:34px;margin-bottom:10px}
+#toast{position:fixed;bottom:calc(var(--nav-h)+12px);left:50%;transform:translateX(-50%) translateY(10px);
+  background:var(--card2);border:1px solid var(--gold-dim);color:var(--text);padding:8px 16px;
+  border-radius:var(--radius-sm);font-size:12px;opacity:0;transition:all .3s;z-index:999;pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">HIDAKA STREAM</div>
-    </header>
+<nav id="topnav">
+  <div>
+    <div class="logo">HIDAKASTREAM</div>
+    <span class="logo-sub">Streaming Khusus Donghua</span>
+  </div>
+  <div style="display:flex;gap:8px">
+    <div class="icon-btn" onclick="showSection('schedule')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    </div>
+    <div class="icon-btn" onclick="goSearch()">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </div>
+  </div>
+</nav>
 
-    <main>
-        <h2 class="section-title">Episode Terbaru</h2>
-        <div id="loader" class="loader"><div class="spinner"></div></div>
-        <div id="grid" class="donghua-grid"></div>
-    </main>
+<div id="app">
 
-    <script>
-        // Xiao ye's Script - Jangan dirusak.
-        document.addEventListener('DOMContentLoaded', async () => {
-            const grid = document.getElementById('grid');
-            const loader = document.getElementById('loader');
+<section id="sec-home" class="section active">
+  <div class="hero-wrap" id="home-hero-wrap"><div class="hero-track" id="home-hero-track"></div><div class="hero-dots" id="home-hero-dots"></div></div>
+  <div id="cw-section" style="display:none">
+    <div class="sh"><span class="sh-title">Lanjutkan Nonton</span><button class="sh-more" onclick="clearHistory()">Hapus</button></div>
+    <div class="cw-scroll" id="cw-list"></div>
+  </div>
+  <div class="sh"><span class="sh-title">Episode Terbaru</span></div>
+  <div class="ep-scroll" id="home-latest"><div class="loader"><div class="spinner"></div></div></div>
+  <div class="gline" style="margin:14px 0 0"></div>
+  <div class="sh"><span class="sh-title">Rekomendasi Fantasy</span></div>
+  <div class="grid3" id="home-fantasy"><div class="loader" style="grid-column:1/-1"><div class="spinner"></div></div></div>
+  <div class="gline" style="margin:14px 0 0"></div>
+  <div class="sh"><span class="sh-title">Sedang Populer</span></div>
+  <div class="pop-list" id="home-popular"><div class="loader"><div class="spinner"></div></div></div>
+  <div class="gline" style="margin:14px 0 0"></div>
+  <div class="sh"><span class="sh-title">Pendatang Baru</span><button class="sh-more" onclick="showSection('donghua');switchSeries('new')">Lihat Semua ›</button></div>
+  <div class="ep-scroll" id="home-new"><div class="loader"><div class="spinner"></div></div></div>
+</section>
 
-            try {
-                // Di Vercel, API endpoint ada di /api/donghub?command=home
-                const response = await fetch('/api/donghub?command=home');
-                const data = await response.json();
+<section id="sec-donghua" class="section">
+  <div class="hero-wrap" id="dh-hero-wrap"><div class="hero-track" id="dh-hero-track"></div><div class="hero-dots" id="dh-hero-dots"></div></div>
+  <div class="sh"><span class="sh-title">Episode Terbaru</span></div>
+  <div class="ep-scroll" id="dh-latest"><div class="loader"><div class="spinner"></div></div></div>
+  <div class="gline" style="margin:14px 0 0"></div>
+  <div class="sh"><span class="sh-title">Jadwal Hari Ini</span><button class="sh-more" onclick="showSection('schedule')">Lihat Jadwal ›</button></div>
+  <div class="ep-scroll" id="dh-today"><div class="loader"><div class="spinner"></div></div></div>
+  <div class="gline" style="margin:14px 0 0"></div>
+  <div class="sh"><span class="sh-title" id="dh-grid-title">Series Terbaru</span></div>
+  <div class="tab-row">
+    <button class="tab-pill active" id="dtab-new" onclick="switchSeries('new')">Terbaru</button>
+    <button class="tab-pill" id="dtab-done" onclick="switchSeries('completed')">Tamat</button>
+  </div>
+  <div class="grid3" id="dh-grid"><div class="loader" style="grid-column:1/-1"><div class="spinner"></div></div></div>
+  <div class="pagination">
+    <button class="page-btn" id="dpage-prev" onclick="changeDPage(-1)" disabled>‹ Prev</button>
+    <button class="page-btn" id="dpage-next" onclick="changeDPage(1)">Next ›</button>
+  </div>
+</section>
 
-                loader.style.display = 'none';
+<section id="sec-search" class="section">
+  <div class="search-bar">
+    <input class="s-input" id="s-input" type="text" placeholder="Cari donghua kesukaan lu..."/>
+    <button class="s-btn" onclick="doSearch()">Cari</button>
+  </div>
+  <div id="search-results" style="padding-top:8px">
+    <div class="empty"><div class="empty-ico">🔍</div>Ketik lalu tekan Cari</div>
+  </div>
+</section>
 
-                if(data.latest_episodes && data.latest_episodes.length > 0) {
-                    data.latest_episodes.forEach((anime, index) => {
-                        const delay = index * 0.1; // Staggered animation
-                        const card = document.createElement('div');
-                        card.className = 'card';
-                        card.style.animationDelay = `${delay}s`;
-                        
-                        card.innerHTML = `
-                            <div class="img-container">
-                                <span class="episode-badge">${anime.episode || '?'}</span>
-                                <img src="${anime.thumbnail}" alt="${anime.title}" class="card-img" loading="lazy">
-                                <div class="card-info">
-                                    <h3 class="card-title">${anime.title}</h3>
-                                </div>
-                            </div>
-                        `;
-                        grid.appendChild(card);
-                    });
-                } else {
-                    grid.innerHTML = '<p>Nggak ada data, cek API lu yang bener.</p>';
-                }
+<section id="sec-schedule" class="section">
+  <div class="sh">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="back-btn" onclick="showSection('home')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+      <span class="sh-title">Jadwal Tayang</span>
+    </div>
+  </div>
+  <div class="sch-wrap">
+    <div class="day-tabs-scroll" id="day-tabs"></div>
+    <div class="sch-grid" id="sch-grid">
+      <div class="loader" style="grid-column:1/-1"><div class="spinner"></div><div class="ldr-txt">Memuat jadwal...</div></div>
+    </div>
+  </div>
+</section>
 
-            } catch (err) {
-                loader.style.display = 'none';
-                grid.innerHTML = `<p style="color: red;">Error: ${err.message}. Gitu aja nggak becus.</p>`;
-            }
-        });
-    </script>
+</div><nav id="botnav">
+  <button class="bnav active" id="bn-home" onclick="showSection('home')">
+    <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg>
+    Beranda
+  </button>
+  <button class="bnav" id="bn-donghua" onclick="showSection('donghua')">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+    Donghua
+  </button>
+  <button class="bnav" id="bn-search" onclick="showSection('search')">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    Cari
+  </button>
+</nav>
+
+<div id="detail-page">
+  <div class="dp-back">
+    <div class="back-btn" onclick="closeDetail()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <span id="dp-back-title" style="font-size:13px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1"></span>
+  </div>
+  <div id="dp-body"></div>
+</div>
+
+<div id="watch-page">
+  <div class="wp-back">
+    <div class="back-btn" onclick="closeWatch()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <span id="wp-back-title" style="font-size:12px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1"></span>
+  </div>
+  <div id="player-wrap"><iframe id="player-frame" allowfullscreen allow="autoplay;fullscreen"></iframe></div>
+  <div class="wp-info">
+    <div class="wp-title" id="wp-ep-title"></div>
+    <div class="wp-sub" id="wp-series-title"></div>
+  </div>
+  <div class="srv-section">
+    <div class="srv-label">Mirror Server</div>
+    <div class="srv-list" id="srv-list"></div>
+  </div>
+  <div class="wp-nav">
+    <button class="ep-nav-btn" id="btn-prev-ep" onclick="navEp('prev')" disabled>‹ Ep Sebelumnya</button>
+    <button class="ep-nav-btn" id="btn-next-ep" onclick="navEp('next')" disabled>Ep Selanjutnya ›</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const DH_API = "/api/donghub";
+const IMG = u => u ? `/api/img?url=${encodeURIComponent(u)}` : "";
+const HIST_KEY = "hs_history";
+
+// State
+let scheduleLoaded=false, scheduleData={}, currentDay="";
+let seriesMode="new", seriesPage=1;
+let watchData=null;
+let homeHeroTimer=null, homeHeroIdx=0, homeHeroItems=[];
+let dhHeroTimer=null, dhHeroIdx=0, dhHeroItems=[];
+let dhLoaded=false;
+
+// ── UTILS ──
+function slug(url){ return url?url.replace(/^https?:\/\/[^/]+\//,"").replace(/\/$/,""):""; }
+function toast(m){ const t=document.getElementById("toast"); t.textContent=m; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2200); }
+async function apiGet(base,p){ const r=await fetch(`${base}?${new URLSearchParams(p)}`); if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); }
+
+// ── HISTORY ──
+function getHist(){ try{return JSON.parse(localStorage.getItem(HIST_KEY)||"[]")}catch{return[]} }
+function saveHist(h){ localStorage.setItem(HIST_KEY,JSON.stringify(h)) }
+function addHist(slugVal,epTitle,seriesTitle,thumb){
+  let h=getHist().filter(x=>x.slug!==slugVal);
+  h.unshift({slug:slugVal,epTitle,seriesTitle,thumb,ts:Date.now()});
+  saveHist(h.slice(0,12));
+}
+function clearHistory(){ saveHist([]); renderCW(); }
+function renderCW(){
+  const h=getHist(); const sec=document.getElementById("cw-section"); const list=document.getElementById("cw-list");
+  if(!h.length){sec.style.display="none";return;}
+  sec.style.display="block";
+  list.innerHTML=h.map(i=>`
+    <div class="cw-card" onclick="openWatch('${encodeURIComponent(i.slug)}')">
+      <img class="cw-thumb" src="${IMG(i.thumb)}" onerror="this.style.background='#2a2a2a'" loading="lazy"/>
+      <div class="cw-bar"><div class="cw-prog"></div></div>
+      <div class="cw-info"><div class="cw-ep">${i.epTitle||""}</div><div class="cw-title">${i.seriesTitle||""}</div></div>
+    </div>`).join("");
+}
+
+// ── HERO (generic) ──
+function buildHero(trackId, dotsId, items, timerRef, idxRef, clickFn){
+  items.forEach((i,idx)=>{
+    const slide=document.createElement("div"); slide.className="hero-slide";
+    slide.innerHTML=`<img class="hero-img" src="${IMG(i.thumbnail||i.image)}" onerror="this.style.background='#1a1a1a'" loading="lazy"/>
+      <div class="hero-overlay">
+        <div class="hero-badge">✦ Populer</div>
+        <div class="hero-title">${i.title}</div>
+        <div class="hero-meta"><span class="hero-status">ONGOING</span><span style="color:var(--muted)">•</span><span>Donghua</span></div>
+      </div>`;
+    slide.onclick=()=>clickFn(i);
+    document.getElementById(trackId).appendChild(slide);
+    const dot=document.createElement("div"); dot.className="hero-dot"+(idx===0?" active":"");
+    dot.onclick=(e)=>{e.stopPropagation();goHeroTo(trackId,dotsId,idx,timerRef,idxRef,items.length);};
+    document.getElementById(dotsId).appendChild(dot);
+  });
+  return setInterval(()=>{
+    idxRef.val=(idxRef.val+1)%items.length;
+    goHeroTo(trackId,dotsId,idxRef.val,timerRef,idxRef,items.length);
+  },4000);
+}
+function goHeroTo(trackId,dotsId,i){
+  document.getElementById(trackId).style.transform=`translateX(-${i*100}%)`;
+  document.querySelectorAll(`#${dotsId} .hero-dot`).forEach((d,idx)=>d.classList.toggle("active",idx===i));
+}
+
+// ── SECTION NAV ──
+function showSection(name){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".bnav").forEach(b=>b.classList.remove("active"));
+  document.getElementById("sec-"+name).classList.add("active");
+  const bn=document.getElementById("bn-"+name);
+  if(bn) bn.classList.add("active");
+  if(name==="schedule"&&!scheduleLoaded) loadSchedule();
+  if(name==="donghua"&&!dhLoaded){ dhLoaded=true; loadDonghuaSection(); }
+  if(name==="home") renderCW();
+}
+function goSearch(){ showSection("search"); setTimeout(()=>document.getElementById("s-input").focus(),100); }
+
+// ══ BERANDA ══
+async function loadHome(){
+  try{
+    const [homeData,newData]=await Promise.all([
+      apiGet(DH_API,{cmd:"home"}),
+      apiGet(DH_API,{cmd:"new-series",page:1})
+    ]);
+    const pop=homeData.popular_series||[];
+
+    // Hero
+    if(pop.length){
+      const idxRef={val:0};
+      homeHeroTimer=buildHero("home-hero-track","home-hero-dots",pop.slice(0,8),homeHeroTimer,idxRef,
+        i=>openDetail(encodeURIComponent(slug(i.url))));
+    }
+
+    renderEpScroll(document.getElementById("home-latest"),homeData.latest_episodes||[],"watch");
+    renderPopular(pop);
+
+    const kw=["perfect","immortal","heaven","god","spirit","dragon","sword","martial","dao","cultivat","divine","soul","battle","renegade","tales","coiling"];
+    const fan=(homeData.latest_episodes||[]).filter(i=>kw.some(k=>i.title.toLowerCase().includes(k))).slice(0,9);
+    renderGrid3(document.getElementById("home-fantasy"),fan.length?fan:(homeData.latest_episodes||[]).slice(0,9));
+    renderEpScroll(document.getElementById("home-new"),(newData.result||[]).slice(0,12));
+  }catch(e){ document.getElementById("home-latest").innerHTML=`<div class="empty">Gagal memuat</div>`; }
+  renderCW();
+}
+
+// ══ DONGHUA SECTION ══
+async function loadDonghuaSection(){
+  try{
+    const [homeData,todayData]=await Promise.all([
+      apiGet(DH_API,{cmd:"home"}),
+      apiGet(DH_API,{cmd:"schedule"})
+    ]);
+    const pop=homeData.popular_series||[];
+
+    // Hero
+    if(pop.length){
+      const idxRef={val:0};
+      dhHeroTimer=buildHero("dh-hero-track","dh-hero-dots",pop.slice(0,8),dhHeroTimer,idxRef,
+        i=>openDetail(encodeURIComponent(slug(i.url))));
+    }
+
+    renderEpScroll(document.getElementById("dh-latest"),homeData.latest_episodes||[],"watch");
+
+    // Today schedule
+    const todayMap=["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+    const todayName=todayMap[new Date().getDay()];
+    const sched=todayData.result||{};
+    const todayItems=sched[todayName]||[];
+    renderEpScroll(document.getElementById("dh-today"),todayItems.slice(0,12));
+  }catch{}
+  loadDHGrid();
+}
+
+async function loadDHGrid(){
+  const el=document.getElementById("dh-grid");
+  el.innerHTML=`<div class="loader" style="grid-column:1/-1"><div class="spinner"></div></div>`;
+  try{
+    const d=await apiGet(DH_API,{cmd:seriesMode==="new"?"new-series":"completed",page:seriesPage});
+    if(!d.result||!d.result.length){el.innerHTML=`<div class="empty" style="grid-column:1/-1">Tidak ada data</div>`;return;}
+    el.innerHTML=d.result.map(i=>gcHTML(i,"openDetail")).join("");
+    document.getElementById("dpage-prev").disabled=seriesPage<=1;
+    document.getElementById("dpage-next").disabled=!d.has_next;
+  }catch{el.innerHTML=`<div class="empty" style="grid-column:1/-1">⚠️ Gagal memuat</div>`;}
+}
+function switchSeries(mode){
+  seriesMode=mode; seriesPage=1;
+  document.getElementById("dtab-new").classList.toggle("active",mode==="new");
+  document.getElementById("dtab-done").classList.toggle("active",mode==="completed");
+  document.getElementById("dh-grid-title").textContent=mode==="new"?"Series Terbaru":"Series Tamat";
+  loadDHGrid();
+}
+function changeDPage(dir){ seriesPage=Math.max(1,seriesPage+dir); loadDHGrid(); document.getElementById("sec-donghua").scrollTop=0; }
+
+// ── RENDER HELPERS ──
+function renderEpScroll(el,items,mode){
+  mode = mode || "detail";
+  if(!items.length){el.innerHTML=`<div class="empty">Tidak ada data</div>`;return;}
+  el.innerHTML=items.map(i=>{
+    const clickFn = mode==="watch"
+      ? `openWatch('${encodeURIComponent(slug(i.url))}','${encodeURIComponent(i.seriesTitle||i.title)}','${encodeURIComponent(i.thumbnail||"")}')`
+      : `openDetail('${encodeURIComponent(slug(i.url))}')`;
+    return `
+    <div class="ep-card" onclick="${clickFn}">
+      <div class="ep-thumb-wrap">
+        <img class="ep-thumb" src="${IMG(i.thumbnail)}" onerror="this.style.background='#2a2a2a'" loading="lazy"/>
+        <div class="ep-new">NEW</div>
+        <div class="ep-overlay"><div class="ep-num">${i.episode||""}</div></div>
+      </div>
+      <div class="ep-title">${i.title}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderGrid3(el,items){
+  if(!items.length){el.innerHTML=`<div class="empty" style="grid-column:1/-1">Tidak ada data</div>`;return;}
+  el.innerHTML=items.map(i=>gcHTML(i,"openDetail")).join("");
+}
+
+function gcHTML(i,fn){
+  const url=i.url||"";
+  return `<div class="gc" onclick="${fn}('${encodeURIComponent(slug(url))}')">
+    <div class="gc-wrap">
+      <img class="gc-img" src="${IMG(i.thumbnail||i.image)}" onerror="this.style.background='#2a2a2a'" loading="lazy"/>
+      <div class="gc-badge">${i.status||"NEW"}</div>
+      <div class="gc-overlay"><div class="gc-eps">${i.episode||""}</div></div>
+    </div>
+    <div class="gc-title">${i.title}</div>
+  </div>`;
+}
+
+function renderPopular(items){
+  const el=document.getElementById("home-popular");
+  if(!items.length){el.innerHTML="";return;}
+  el.innerHTML=items.map((i,idx)=>`
+    <div class="pop-item" onclick="openDetail('${encodeURIComponent(slug(i.url))}')">
+      <span class="pop-rank ${idx<3?'t':''}">${String(idx+1).padStart(2,"0")}</span>
+      <img class="pop-img" src="${IMG(i.thumbnail)}" onerror="this.style.background='#2a2a2a'" loading="lazy"/>
+      <div class="pop-info">
+        <div class="pop-title">${i.title}</div>
+        <div class="pop-meta"><span class="pop-tag on">ONGOING</span><span class="pop-ep">Donghua</span></div>
+      </div>
+    </div>`).join("");
+}
+
+// ── SEARCH ──
+document.getElementById("s-input").addEventListener("keydown",e=>{if(e.key==="Enter")doSearch();});
+async function doSearch(){
+  const q=document.getElementById("s-input").value.trim(); if(!q) return;
+  const el=document.getElementById("search-results");
+  el.innerHTML=`<div class="loader"><div class="spinner"></div><div class="ldr-txt">Mencari "${q}"...</div></div>`;
+  try{
+    const d=await apiGet(DH_API,{cmd:"search",query:q});
+    if(!d.result||!d.result.length){el.innerHTML=`<div class="empty"><div class="empty-ico">🔍</div>Tidak ada hasil</div>`;return;}
+    el.innerHTML=`<div class="grid3" style="padding-top:8px">${d.result.map(i=>gcHTML(i,"openDetail")).join("")}</div>`;
+  }catch{el.innerHTML=`<div class="empty"><div class="empty-ico">⚠️</div>Gagal mencari</div>`;}
+}
+
+// ── SCHEDULE ──
+async function loadSchedule(){
+  scheduleLoaded=true;
+  try{
+    const d=await apiGet(DH_API,{cmd:"schedule"});
+    scheduleData=d.result||{};
+    const days=Object.keys(scheduleData);
+    if(!days.length){document.getElementById("sch-grid").innerHTML=`<div class="empty" style="grid-column:1/-1">Tidak ada jadwal</div>`;return;}
+    const todayMap=["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+    const todayName=todayMap[new Date().getDay()];
+    currentDay=days.includes(todayName)?todayName:days[0];
+    document.getElementById("day-tabs").innerHTML=days.map(day=>`
+      <button class="day-tab ${day===currentDay?'active':''}" onclick="switchDay('${day}')">${day}</button>`).join("");
+    renderSchDay(currentDay);
+  }catch{document.getElementById("sch-grid").innerHTML=`<div class="empty" style="grid-column:1/-1">⚠️ Gagal</div>`;}
+}
+function switchDay(day){
+  currentDay=day;
+  document.querySelectorAll(".day-tab").forEach(b=>b.classList.toggle("active",b.textContent===day));
+  renderSchDay(day);
+}
+function renderSchDay(day){
+  const items=scheduleData[day]||[];
+  const el=document.getElementById("sch-grid");
+  if(!items.length){el.innerHTML=`<div class="empty" style="grid-column:1/-1">Tidak ada</div>`;return;}
+  el.innerHTML=items.map(i=>gcHTML(i,"openDetail")).join("");
+}
+
+// ── DONGHUA DETAIL ──
+async function openDetail(encodedSlug){
+  const s=decodeURIComponent(encodedSlug);
+  const page=document.getElementById("detail-page");
+  const body=document.getElementById("dp-body");
+  document.getElementById("dp-back-title").textContent=s;
+  body.innerHTML=`<div class="loader" style="padding:60px"><div class="spinner"></div><div class="ldr-txt">Memuat...</div></div>`;
+  page.classList.add("open"); document.body.style.overflow="hidden";
+  try{
+    const d=await apiGet(DH_API,{cmd:"detail",slug:s});
+    if(d.error){body.innerHTML=`<div class="empty"><div class="empty-ico">😞</div>${d.error}</div>`;return;}
+    document.getElementById("dp-back-title").textContent=d.title;
+    const eps=d.result||[];
+    body.innerHTML=`
+      <div class="dp-banner"><img class="dp-banner-img" src="${IMG(d.poster)}" onerror="this.style.display='none'"/></div>
+      <div class="dp-content">
+        <div class="dp-row">
+          <img class="dp-poster" src="${IMG(d.poster)}" onerror="this.style.background='#2a2a2a'"/>
+          <div class="dp-meta">
+            <div class="dp-title">${d.title}</div>
+            <div class="dp-tags">${(d.genres||[]).slice(0,4).map(g=>`<span class="dp-tag">${g}</span>`).join("")}</div>
+            <div class="dp-stats">
+              ${d.rating?`<div class="dp-stat">⭐ <strong>${d.rating}</strong></div>`:""}
+              ${d.status?`<div class="dp-stat">📺 <strong>${d.status}</strong></div>`:""}
+              ${d.total_episodes?`<div class="dp-stat">🎬 <strong>${d.total_episodes} Ep</strong></div>`:""}
+            </div>
+          </div>
+        </div>
+        ${d.synopsis?`<div class="dp-synopsis">${d.synopsis}</div>`:""}
+        <div class="ep-list-hd">Daftar Episode <span>(${eps.length})</span></div>
+        <div class="ep-list">
+          ${eps.map(e=>`
+            <div class="ep-row" onclick="openWatch('${encodeURIComponent(slug(e.url))}','${encodeURIComponent(d.title)}','${encodeURIComponent(d.poster||"")}')">
+              <span class="ep-row-num">Ep ${e.episode}</span>
+              <span class="ep-row-title">${e.title||d.title}</span>
+              <span class="ep-row-date">${e.release_date||""}</span>
+              <span class="ep-row-arr">›</span>
+            </div>`).join("")}
+        </div>
+      </div>`;
+  }catch{body.innerHTML=`<div class="empty"><div class="empty-ico">⚠️</div>Gagal memuat</div>`;}
+}
+function closeDetail(){ document.getElementById("detail-page").classList.remove("open"); document.body.style.overflow=""; }
+
+
+// ── DONGHUA WATCH ──
+async function openWatch(encodedSlug, encodedSeries, encodedThumb){
+  const s=decodeURIComponent(encodedSlug);
+  const seriesTitle=encodedSeries?decodeURIComponent(encodedSeries):"";
+  const thumb=encodedThumb?decodeURIComponent(encodedThumb):"";
+  const page=document.getElementById("watch-page");
+  document.getElementById("wp-back-title").textContent=s;
+  document.getElementById("wp-ep-title").textContent="";
+  document.getElementById("wp-series-title").textContent=seriesTitle;
+  document.getElementById("player-frame").src="";
+  document.getElementById("srv-list").innerHTML=`<div class="loader" style="width:100%"><div class="spinner"></div></div>`;
+  page.classList.add("open");
+  try{
+    const d=await apiGet(DH_API,{cmd:"watch",slug:s});
+    watchData=d;
+    document.getElementById("wp-back-title").textContent=d.title;
+    document.getElementById("wp-ep-title").textContent=d.title;
+    const isValidUrl=u=>typeof u==="string"&&/^https?:\/\//i.test(u.trim());
+    const url=isValidUrl(d.video_url)?d.video_url:(d.servers||[]).map(s=>s.url).find(isValidUrl);
+    if(url) document.getElementById("player-frame").src=url;
+    else document.getElementById("player-frame").src="";
+    const allSrv=[];
+    if(isValidUrl(d.video_url)) allSrv.push({name:"Default",url:d.video_url});
+    (d.servers||[]).forEach(sv=>{if(isValidUrl(sv.url)&&sv.url!==d.video_url) allSrv.push(sv);});
+    const sl=document.getElementById("srv-list");
+    sl.innerHTML=allSrv.length
+      ?allSrv.map((sv,i)=>`<button class="srv-btn ${(sv.url===url)?'active':''}" onclick="switchSrv(this,'${encodeURIComponent(sv.url)}')">${sv.name||"Mirror "+(i+1)}</button>`).join("")
+      :`<div style="color:var(--muted);font-size:12px">⚠️ Tidak ada mirror yang tersedia untuk episode ini</div>`;
+    document.getElementById("btn-prev-ep").disabled=!d.prev_episode;
+    document.getElementById("btn-next-ep").disabled=!d.next_episode;
+    if(seriesTitle) addHist(s,d.title,seriesTitle,thumb);
+  }catch{
+    document.getElementById("srv-list").innerHTML=`<div style="color:var(--muted);font-size:12px;padding:8px">⚠️ Gagal memuat player</div>`;
+  }
+}
+
+function switchSrv(btn,encodedUrl){
+  document.querySelectorAll(".srv-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("player-frame").src=decodeURIComponent(encodedUrl);
+}
+function navEp(dir){
+  if(!watchData) return;
+  const url=dir==="next"?watchData.next_episode:watchData.prev_episode;
+  if(url) openWatch(encodeURIComponent(slug(url)));
+}
+function closeWatch(){
+  document.getElementById("watch-page").classList.remove("open");
+  document.getElementById("player-frame").src="";
+  watchData=null; renderCW();
+}
+
+loadHome();
+</script>
 </body>
 </html>
