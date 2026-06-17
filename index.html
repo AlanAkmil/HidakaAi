@@ -1,700 +1,662 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
-<title>HidakaStream | Donghua Only</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-<style>
-:root{
-  --bg:#0c0c0c;--surface:#161616;--card:#1e1e1e;--card2:#252525;
-  --border:#2a2a2a;--border2:#333;
-  --gold:#d4a843;--gold2:#f0c060;--gold-dim:#7a5820;--gold-bg:#1a1408;
-  --text:#f0f0f0;--text2:#b0b0b0;--muted:#666;
-  --radius:12px;--radius-sm:8px;--nav-h:60px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;overflow-x:hidden}
-::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:2px}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OxyX AI · Multi AI Scraper</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --border: #1e1e2e;
+            --accent: #7c3aed;
+            --accent2: #a78bfa;
+            --text: #e2e8f0;
+            --text2: #94a3b8;
+        }
 
-/* ── TOPNAV ── */
-#topnav{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav-h);
-  background:var(--bg);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;padding:0 16px}
-.logo{font-family:'Cinzel',serif;font-size:17px;font-weight:700;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px}
-.logo-sub{font-size:9px;color:var(--muted);font-family:'Inter',sans-serif;
-  -webkit-text-fill-color:var(--muted);display:block;margin-top:-2px;letter-spacing:1px}
-.icon-btn{background:var(--card);border:1px solid var(--border);border-radius:50%;
-  width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.icon-btn svg{width:16px;height:16px;stroke:var(--text2);fill:none;stroke-width:2}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ── BOTNAV ── */
-#botnav{position:fixed;bottom:0;left:0;right:0;z-index:200;height:var(--nav-h);
-  background:var(--surface);border-top:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-around;padding:0 2px}
-.bnav{display:flex;flex-direction:column;align-items:center;gap:2px;
-  padding:5px 4px;cursor:pointer;color:var(--muted);font-size:8.5px;font-weight:500;
-  border:none;background:none;transition:color .2s;flex:1;min-width:0}
-.bnav svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8}
-.bnav.active{color:var(--gold)}
-.bnav.active svg{stroke:var(--gold)}
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
 
-/* ── APP ── */
-#app{padding-top:var(--nav-h);padding-bottom:calc(var(--nav-h)+6px);min-height:100vh}
-.section{display:none}.section.active{display:block}
+        .container {
+            width: 100%;
+            max-width: 760px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 95vh;
+        }
 
-/* ══════════════════════════════════════
-   SHARED COMPONENTS
-══════════════════════════════════════ */
-.sh{display:flex;align-items:center;justify-content:space-between;padding:18px 16px 10px}
-.sh-title{font-size:16px;font-weight:700;color:var(--text)}
-.sh-more{font-size:12px;color:var(--gold);cursor:pointer;background:none;border:none}
-.gline{height:1px;background:linear-gradient(to right,transparent,var(--gold-dim),transparent);margin:4px 0}
+        .header {
+            text-align: center;
+            padding: 4px 0;
+        }
 
-/* Hero Slider */
-.hero-wrap{position:relative;width:100%;height:230px;overflow:hidden;background:#111}
-.hero-track{display:flex;height:100%;transition:transform .4s ease}
-.hero-slide{flex:0 0 100%;position:relative;overflow:hidden}
-.hero-img{width:100%;height:100%;object-fit:cover;opacity:.65}
-.hero-overlay{position:absolute;inset:0;
-  background:linear-gradient(to bottom,transparent 15%,rgba(12,12,12,.97) 100%);
-  display:flex;flex-direction:column;justify-content:flex-end;padding:14px 16px}
-.hero-badge{display:inline-flex;align-items:center;gap:4px;background:var(--gold);
-  color:#000;font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;
-  margin-bottom:5px;width:fit-content}
-.hero-title{font-size:19px;font-weight:700;color:#fff;margin-bottom:5px;line-height:1.2}
-.hero-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text2)}
-.hero-status{background:#1a3a1a;color:#4caf50;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
-.hero-dots{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);display:flex;gap:4px;z-index:2}
-.hero-dot{width:5px;height:5px;border-radius:50%;background:#fff3;transition:all .3s;cursor:pointer}
-.hero-dot.active{width:16px;border-radius:3px;background:var(--gold)}
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent2), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-/* Continue Watching */
-.cw-scroll{display:flex;gap:10px;padding:0 16px;overflow-x:auto;scrollbar-width:none}
-.cw-scroll::-webkit-scrollbar{display:none}
-.cw-card{flex:0 0 155px;border-radius:var(--radius);overflow:hidden;background:var(--card);
-  border:1px solid var(--border);cursor:pointer;position:relative}
-.cw-card:active{opacity:.85}
-.cw-thumb{width:100%;height:88px;object-fit:cover;display:block;background:var(--border)}
-.cw-bar{position:absolute;bottom:88px;left:0;right:0;height:3px;background:#fff1}
-.cw-prog{height:100%;background:var(--gold);width:35%}
-.cw-info{padding:7px 8px}
-.cw-ep{font-size:10px;color:var(--gold);font-weight:600;margin-bottom:2px}
-.cw-title{font-size:11px;font-weight:500;color:var(--text);display:-webkit-box;
-  -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
+        .header span {
+            font-size: 0.7rem;
+            color: var(--text2);
+            letter-spacing: 2px;
+        }
 
-/* Episode Scroll */
-.ep-scroll{display:flex;gap:10px;padding:0 16px;overflow-x:auto;scrollbar-width:none}
-.ep-scroll::-webkit-scrollbar{display:none}
-.ep-card{flex:0 0 110px;cursor:pointer}.ep-card:active{opacity:.85}
-.ep-thumb-wrap{position:relative;border-radius:var(--radius-sm);overflow:hidden;width:110px;height:150px;background:var(--border)}
-.ep-thumb{width:100%;height:100%;object-fit:cover;display:block}
-.ep-overlay{position:absolute;bottom:0;left:0;right:0;padding:5px;background:linear-gradient(transparent,rgba(0,0,0,.88))}
-.ep-num{font-size:10px;font-weight:700;color:#fff}
-.ep-new{position:absolute;top:5px;left:5px;background:var(--gold);color:#000;font-size:8px;font-weight:700;padding:2px 5px;border-radius:4px}
-.ep-title{font-size:11px;color:var(--text2);margin-top:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
+        /* MODEL SELECTOR ENHANCED */
+        .model-selector-wrapper {
+            position: relative;
+        }
 
-/* Grid 3 */
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 16px}
-.gc{cursor:pointer}.gc:active{opacity:.85}
-.gc-wrap{position:relative;border-radius:var(--radius-sm);overflow:hidden;width:100%;aspect-ratio:2/3;background:var(--border)}
-.gc-img{width:100%;height:100%;object-fit:cover;display:block}
-.gc-overlay{position:absolute;bottom:0;left:0;right:0;padding:5px;background:linear-gradient(transparent,rgba(0,0,0,.88))}
-.gc-eps{font-size:10px;font-weight:700;color:#fff}
-.gc-badge{position:absolute;top:5px;left:5px;background:var(--gold);color:#000;font-size:8px;font-weight:700;padding:2px 5px;border-radius:4px}
-.gc-title{font-size:11px;color:var(--text2);margin-top:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
+        .model-trigger {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all .2s;
+            user-select: none;
+        }
 
-/* Popular List */
-.pop-list{display:flex;flex-direction:column;gap:8px;padding:0 16px}
-.pop-item{display:flex;gap:12px;align-items:center;padding:10px;background:var(--card);
-  border-radius:var(--radius);border:1px solid var(--border);cursor:pointer}
-.pop-item:active{border-color:var(--gold-dim)}
-.pop-rank{font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--border2);min-width:30px;text-align:center}
-.pop-rank.t{color:var(--gold-dim)}
-.pop-img{width:46px;height:64px;object-fit:cover;border-radius:6px;background:var(--border);flex-shrink:0}
-.pop-info{flex:1;min-width:0}
-.pop-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pop-meta{display:flex;gap:6px;align-items:center}
-.pop-ep{font-size:11px;color:var(--muted)}
-.pop-tag{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
-.pop-tag.on{background:#0d2b0d;color:#4caf50}
+        .model-trigger:hover { border-color: var(--accent); }
 
-/* Pagination */
-.pagination{display:flex;justify-content:center;gap:10px;padding:16px}
-.page-btn{padding:8px 20px;border-radius:var(--radius-sm);background:var(--card);
-  border:1px solid var(--border);color:var(--text2);font-size:13px;cursor:pointer}
-.page-btn:disabled{opacity:.3;cursor:default}
+        .model-trigger .selected-icon {
+            font-size: 1.4rem;
+        }
 
-/* Tabs */
-.tab-row{display:flex;gap:8px;padding:0 16px 12px;overflow-x:auto;scrollbar-width:none}
-.tab-row::-webkit-scrollbar{display:none}
-.tab-pill{padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;
-  cursor:pointer;border:1px solid var(--border);background:var(--card);
-  color:var(--muted);transition:all .2s;white-space:nowrap;flex-shrink:0}
-.tab-pill.active{background:var(--gold);color:#000;border-color:var(--gold)}
+        .model-trigger .selected-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
 
-/* ══════════════════════════════════════
-   SEARCH & JADWAL
-══════════════════════════════════════ */
-.search-bar{padding:14px 16px;display:flex;gap:10px}
-.s-input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
-  padding:11px 14px;color:var(--text);font-size:14px;font-family:'Inter',sans-serif;outline:none}
-.s-input:focus{border-color:var(--gold-dim)}
-.s-input::placeholder{color:var(--muted)}
-.s-btn{background:var(--gold);border:none;border-radius:var(--radius);
-  padding:11px 16px;color:#000;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap}
+        .model-trigger .selected-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
 
-.sch-wrap{padding:0 16px}
-.day-tabs-scroll{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:10px}
-.day-tabs-scroll::-webkit-scrollbar{display:none}
-.day-tab{flex:0 0 auto;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;
-  cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--muted);transition:all .2s}
-.day-tab.active{background:var(--gold);color:#000;border-color:var(--gold)}
-.sch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+        .model-trigger .selected-provider {
+            font-size: 0.7rem;
+            color: var(--text2);
+        }
 
-/* ══════════════════════════════════════
-   DETAIL & WATCH PAGE
-══════════════════════════════════════ */
-#detail-page{display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto}
-#detail-page.open{display:block}
-.dp-back{position:sticky;top:0;z-index:10;background:#0c0c0ccc;backdrop-filter:blur(10px);
-  padding:11px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
-.back-btn{background:var(--card);border:1px solid var(--border);border-radius:50%;
-  width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
-.back-btn svg{width:16px;height:16px;stroke:var(--text);fill:none;stroke-width:2}
-.dp-banner{width:100%;height:240px;position:relative;overflow:hidden}
-.dp-banner-img{width:100%;height:100%;object-fit:cover}
-.dp-banner::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,12,12,.2),var(--bg))}
-.dp-content{padding:0 16px 24px}
-.dp-row{display:flex;gap:14px;margin-top:-50px;position:relative;z-index:2}
-.dp-poster{width:86px;height:122px;object-fit:cover;border-radius:var(--radius);border:2px solid var(--gold-dim);flex-shrink:0;background:var(--border)}
-.dp-meta{padding-top:52px;flex:1;min-width:0}
-.dp-title{font-size:16px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:7px}
-.dp-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px}
-.dp-tag{padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600;background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-dim)}
-.dp-stats{display:flex;gap:12px;flex-wrap:wrap}
-.dp-stat{font-size:11px;color:var(--muted)}
-.dp-stat strong{color:var(--gold);font-weight:600}
-.dp-synopsis{font-size:13px;line-height:1.7;color:var(--text2);margin:14px 0;padding:12px 14px;background:var(--card);border-radius:var(--radius);border-left:3px solid var(--gold-dim)}
-.ep-list-hd{font-size:14px;font-weight:700;color:var(--text);margin:16px 0 10px;display:flex;align-items:center;gap:8px}
-.ep-list-hd span{font-size:12px;color:var(--muted);font-weight:400}
-.ep-list{display:flex;flex-direction:column;gap:6px}
-.ep-row{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;
-  background:var(--card);border-radius:var(--radius-sm);border:1px solid var(--border);cursor:pointer}
-.ep-row:active{border-color:var(--gold-dim)}
-.ep-row-num{font-size:13px;font-weight:700;color:var(--gold);min-width:52px}
-.ep-row-title{font-size:12px;color:var(--text);flex:1}
-.ep-row-date{font-size:10px;color:var(--muted);margin-left:6px;flex-shrink:0}
-.ep-row-arr{color:var(--muted);font-size:18px}
+        .model-trigger .chevron {
+            color: var(--text2);
+            transition: transform .2s;
+            font-size: 0.8rem;
+        }
 
-#watch-page{display:none;position:fixed;inset:0;z-index:400;background:#000;overflow-y:auto}
-#watch-page.open{display:block}
-.wp-back{position:sticky;top:0;z-index:10;background:#000c;backdrop-filter:blur(8px);
-  padding:10px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #222}
-#player-wrap{width:100%;aspect-ratio:16/9;background:#111}
-#player-frame{width:100%;height:100%;border:none;display:block}
-.wp-info{padding:12px 16px 0}
-.wp-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
-.wp-sub{font-size:12px;color:var(--gold)}
-.srv-section{padding:12px 16px}
-.srv-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
-.srv-list{display:flex;flex-wrap:wrap;gap:7px}
-.srv-btn{padding:7px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);
-  background:var(--card);color:var(--text2);font-size:12px;cursor:pointer;transition:all .2s}
-.srv-btn.active{border-color:var(--gold);color:var(--gold);background:var(--gold-bg)}
-.wp-nav{display:flex;gap:10px;padding:8px 16px 24px}
-.ep-nav-btn{flex:1;padding:11px;border-radius:var(--radius-sm);background:var(--card);
-  border:1px solid var(--border);color:var(--text2);font-size:12px;cursor:pointer;text-align:center}
-.ep-nav-btn:active{border-color:var(--gold-dim)}
-.ep-nav-btn:disabled{opacity:.3;cursor:default}
+        .model-trigger.open .chevron {
+            transform: rotate(180deg);
+        }
 
-/* ── LOADER / EMPTY / TOAST ── */
-.loader{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;gap:12px}
-.spinner{width:32px;height:32px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--gold);animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.ldr-txt{font-size:12px;color:var(--muted)}
-.empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px}
-.empty-ico{font-size:34px;margin-bottom:10px}
-#toast{position:fixed;bottom:calc(var(--nav-h)+12px);left:50%;transform:translateX(-50%) translateY(10px);
-  background:var(--card2);border:1px solid var(--gold-dim);color:var(--text);padding:8px 16px;
-  border-radius:var(--radius-sm);font-size:12px;opacity:0;transition:all .3s;z-index:999;pointer-events:none;white-space:nowrap}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-</style>
+        .model-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 6px;
+            background: #181825;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            z-index: 100;
+            overflow: hidden;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+            animation: slideDown .2s ease;
+        }
+
+        .model-dropdown.show { display: block; }
+
+        .dropdown-header {
+            display: flex;
+            gap: 6px;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--text2);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all .2s;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: rgba(124,58,237,0.2);
+            border-color: var(--accent);
+            color: var(--accent2);
+        }
+
+        .tab-btn:hover { color: var(--text); }
+
+        .search-box {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 0.85rem;
+            outline: none;
+            margin: 8px 12px;
+            width: calc(100% - 24px);
+        }
+
+        .search-box:focus { border-color: var(--accent); }
+
+        .model-list-scroll {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 4px 8px 8px;
+        }
+
+        .model-list-scroll::-webkit-scrollbar { width: 4px; }
+        .model-list-scroll::-webkit-scrollbar-thumb {
+            background: rgba(124,58,237,0.3);
+            border-radius: 2px;
+        }
+
+        .model-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all .15s;
+            font-size: 0.85rem;
+        }
+
+        .model-option:hover { background: rgba(124,58,237,0.1); }
+        .model-option.selected { background: rgba(124,58,237,0.2); }
+
+        .model-option .opt-icon { font-size: 1.2rem; }
+
+        .model-option .opt-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .model-option .opt-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .model-option .opt-meta {
+            font-size: 0.65rem;
+            color: var(--text2);
+            display: flex;
+            gap: 6px;
+        }
+
+        .model-option .opt-tag {
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            background: rgba(124,58,237,0.2);
+            color: var(--accent2);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: var(--text2);
+            font-size: 0.8rem;
+        }
+
+        .chat-area {
+            flex: 1;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-area::-webkit-scrollbar { width: 4px; }
+        .chat-area::-webkit-scrollbar-thumb {
+            background: rgba(124,58,237,0.3);
+            border-radius: 2px;
+        }
+
+        .msg {
+            display: flex;
+            flex-direction: column;
+            max-width: 85%;
+            animation: fadeUp .3s ease;
+        }
+
+        .msg.user { align-self: flex-end; }
+        .msg.ai { align-self: flex-start; }
+
+        .msg .bubble {
+            padding: 10px 16px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .msg.user .bubble {
+            background: var(--accent);
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .msg.ai .bubble {
+            background: #1a1a26;
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
+        }
+
+        .msg .tag {
+            font-size: 0.65rem;
+            color: var(--accent2);
+            margin-bottom: 3px;
+            font-weight: 600;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        textarea {
+            flex: 1;
+            padding: 12px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            color: var(--text);
+            font-size: 0.9rem;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+            transition: border .2s;
+            min-height: 48px;
+            max-height: 100px;
+        }
+
+        textarea:focus { border-color: var(--accent); }
+
+        .btn-send {
+            padding: 12px 22px;
+            background: var(--accent);
+            border: none;
+            border-radius: 14px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all .2s;
+        }
+
+        .btn-send:hover { filter: brightness(1.1); }
+        .btn-send:disabled { opacity: .4; cursor: not-allowed; filter: none; }
+
+        .loading-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text2);
+            font-size: 0.8rem;
+        }
+
+        .dot-pulse {
+            width: 6px; height: 6px;
+            background: var(--accent2);
+            border-radius: 50%;
+            animation: pulse .8s infinite;
+        }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%,100% { opacity: .3; } 50% { opacity: 1; } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+        .empty {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text2);
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .footer {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            font-size: 0.7rem;
+            color: var(--text2);
+        }
+
+        .footer .dot {
+            width: 6px; height: 6px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 OxyX AI</h1>
+            <span>53 MODEL · ANONYMOUS</span>
+        </div>
 
-<nav id="topnav">
-  <div>
-    <div class="logo">HIDAKASTREAM</div>
-    <span class="logo-sub">Streaming Khusus Donghua</span>
-  </div>
-  <div style="display:flex;gap:8px">
-    <div class="icon-btn" onclick="showSection('schedule')">
-      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-    </div>
-    <div class="icon-btn" onclick="goSearch()">
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    </div>
-  </div>
-</nav>
-
-<div id="app">
-
-<section id="sec-home" class="section active">
-  <div class="hero-wrap" id="home-hero-wrap"><div class="hero-track" id="home-hero-track"></div><div class="hero-dots" id="home-hero-dots"></div></div>
-  <div id="cw-section" style="display:none">
-    <div class="sh"><span class="sh-title">Lanjutkan Nonton</span><button class="sh-more" onclick="clearHistory()">Hapus</button></div>
-    <div class="cw-scroll" id="cw-list"></div>
-  </div>
-  <div class="sh"><span class="sh-title">Episode Terbaru</span></div>
-  <div class="ep-scroll" id="home-latest"><div class="loader"><div class="spinner"></div></div></div>
-  <div class="gline" style="margin:14px 0 0"></div>
-  <div class="sh"><span class="sh-title">Rekomendasi Fantasy</span></div>
-  <div class="grid3" id="home-fantasy"><div class="loader" style="grid-column:1/-1"><div class="spinner"></div></div></div>
-  <div class="gline" style="margin:14px 0 0"></div>
-  <div class="sh"><span class="sh-title">Sedang Populer</span></div>
-  <div class="pop-list" id="home-popular"><div class="loader"><div class="spinner"></div></div></div>
-  <div class="gline" style="margin:14px 0 0"></div>
-  <div class="sh"><span class="sh-title">Pendatang Baru</span><button class="sh-more" onclick="showSection('donghua');switchSeries('new')">Lihat Semua ›</button></div>
-  <div class="ep-scroll" id="home-new"><div class="loader"><div class="spinner"></div></div></div>
-</section>
-
-<section id="sec-donghua" class="section">
-  <div class="hero-wrap" id="dh-hero-wrap"><div class="hero-track" id="dh-hero-track"></div><div class="hero-dots" id="dh-hero-dots"></div></div>
-  <div class="sh"><span class="sh-title">Episode Terbaru</span></div>
-  <div class="ep-scroll" id="dh-latest"><div class="loader"><div class="spinner"></div></div></div>
-  <div class="gline" style="margin:14px 0 0"></div>
-  <div class="sh"><span class="sh-title">Jadwal Hari Ini</span><button class="sh-more" onclick="showSection('schedule')">Lihat Jadwal ›</button></div>
-  <div class="ep-scroll" id="dh-today"><div class="loader"><div class="spinner"></div></div></div>
-  <div class="gline" style="margin:14px 0 0"></div>
-  <div class="sh"><span class="sh-title" id="dh-grid-title">Series Terbaru</span></div>
-  <div class="tab-row">
-    <button class="tab-pill active" id="dtab-new" onclick="switchSeries('new')">Terbaru</button>
-    <button class="tab-pill" id="dtab-done" onclick="switchSeries('completed')">Tamat</button>
-  </div>
-  <div class="grid3" id="dh-grid"><div class="loader" style="grid-column:1/-1"><div class="spinner"></div></div></div>
-  <div class="pagination">
-    <button class="page-btn" id="dpage-prev" onclick="changeDPage(-1)" disabled>‹ Prev</button>
-    <button class="page-btn" id="dpage-next" onclick="changeDPage(1)">Next ›</button>
-  </div>
-</section>
-
-<section id="sec-search" class="section">
-  <div class="search-bar">
-    <input class="s-input" id="s-input" type="text" placeholder="Cari donghua kesukaan lu..."/>
-    <button class="s-btn" onclick="doSearch()">Cari</button>
-  </div>
-  <div id="search-results" style="padding-top:8px">
-    <div class="empty"><div class="empty-ico">🔍</div>Ketik lalu tekan Cari</div>
-  </div>
-</section>
-
-<section id="sec-schedule" class="section">
-  <div class="sh">
-    <div style="display:flex;align-items:center;gap:10px">
-      <div class="back-btn" onclick="showSection('home')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <span class="sh-title">Jadwal Tayang</span>
-    </div>
-  </div>
-  <div class="sch-wrap">
-    <div class="day-tabs-scroll" id="day-tabs"></div>
-    <div class="sch-grid" id="sch-grid">
-      <div class="loader" style="grid-column:1/-1"><div class="spinner"></div><div class="ldr-txt">Memuat jadwal...</div></div>
-    </div>
-  </div>
-</section>
-
-</div><nav id="botnav">
-  <button class="bnav active" id="bn-home" onclick="showSection('home')">
-    <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg>
-    Beranda
-  </button>
-  <button class="bnav" id="bn-donghua" onclick="showSection('donghua')">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-    Donghua
-  </button>
-  <button class="bnav" id="bn-search" onclick="showSection('search')">
-    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    Cari
-  </button>
-</nav>
-
-<div id="detail-page">
-  <div class="dp-back">
-    <div class="back-btn" onclick="closeDetail()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
-    <span id="dp-back-title" style="font-size:13px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1"></span>
-  </div>
-  <div id="dp-body"></div>
-</div>
-
-<div id="watch-page">
-  <div class="wp-back">
-    <div class="back-btn" onclick="closeWatch()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
-    <span id="wp-back-title" style="font-size:12px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1"></span>
-  </div>
-  <div id="player-wrap"><iframe id="player-frame" allowfullscreen allow="autoplay;fullscreen"></iframe></div>
-  <div class="wp-info">
-    <div class="wp-title" id="wp-ep-title"></div>
-    <div class="wp-sub" id="wp-series-title"></div>
-  </div>
-  <div class="srv-section">
-    <div class="srv-label">Mirror Server</div>
-    <div class="srv-list" id="srv-list"></div>
-  </div>
-  <div class="wp-nav">
-    <button class="ep-nav-btn" id="btn-prev-ep" onclick="navEp('prev')" disabled>‹ Ep Sebelumnya</button>
-    <button class="ep-nav-btn" id="btn-next-ep" onclick="navEp('next')" disabled>Ep Selanjutnya ›</button>
-  </div>
-</div>
-
-<div id="toast"></div>
-
-<script>
-const DH_API = "/api/donghub";
-const IMG = u => u ? `/api/img?url=${encodeURIComponent(u)}` : "";
-const HIST_KEY = "hs_history";
-
-// State
-let scheduleLoaded=false, scheduleData={}, currentDay="";
-let seriesMode="new", seriesPage=1;
-let watchData=null;
-let homeHeroTimer=null, homeHeroIdx=0, homeHeroItems=[];
-let dhHeroTimer=null, dhHeroIdx=0, dhHeroItems=[];
-let dhLoaded=false;
-
-// ── UTILS ──
-function slug(url){ return url?url.replace(/^https?:\/\/[^/]+\//,"").replace(/\/$/,""):""; }
-function toast(m){ const t=document.getElementById("toast"); t.textContent=m; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2200); }
-async function apiGet(base,p){ const r=await fetch(`${base}?${new URLSearchParams(p)}`); if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); }
-
-// ── HISTORY ──
-function getHist(){ try{return JSON.parse(localStorage.getItem(HIST_KEY)||"[]")}catch{return[]} }
-function saveHist(h){ localStorage.setItem(HIST_KEY,JSON.stringify(h)) }
-function addHist(slugVal,epTitle,seriesTitle,thumb){
-  let h=getHist().filter(x=>x.slug!==slugVal);
-  h.unshift({slug:slugVal,epTitle,seriesTitle,thumb,ts:Date.now()});
-  saveHist(h.slice(0,12));
-}
-function clearHistory(){ saveHist([]); renderCW(); }
-function renderCW(){
-  const h=getHist(); const sec=document.getElementById("cw-section"); const list=document.getElementById("cw-list");
-  if(!h.length){sec.style.display="none";return;}
-  sec.style.display="block";
-  list.innerHTML=h.map(i=>`
-    <div class="cw-card" onclick="openWatch('${encodeURIComponent(i.slug)}')">
-      <img class="cw-thumb" src="${IMG(i.thumb)}" onerror="this.style.background='#2a2a2a'" loading="lazy"/>
-      <div class="cw-bar"><div class="cw-prog"></div></div>
-      <div class="cw-info"><div class="cw-ep">${i.epTitle||""}</div><div class="cw-title">${i.seriesTitle||""}</div></div>
-    </div>`).join("");
-}
-
-// ── HERO (generic) ──
-function buildHero(trackId, dotsId, items, timerRef, idxRef, clickFn){
-  items.forEach((i,idx)=>{
-    const slide=document.createElement("div"); slide.className="hero-slide";
-    slide.innerHTML=`<img class="hero-img" src="${IMG(i.thumbnail||i.image)}" onerror="this.style.background='#1a1a1a'" loading="lazy"/>
-      <div class="hero-overlay">
-        <div class="hero-badge">✦ Populer</div>
-        <div class="hero-title">${i.title}</div>
-        <div class="hero-meta"><span class="hero-status">ONGOING</span><span style="color:var(--muted)">•</span><span>Donghua</span></div>
-      </div>`;
-    slide.onclick=()=>clickFn(i);
-    document.getElementById(trackId).appendChild(slide);
-    const dot=document.createElement("div"); dot.className="hero-dot"+(idx===0?" active":"");
-    dot.onclick=(e)=>{e.stopPropagation();goHeroTo(trackId,dotsId,idx,timerRef,idxRef,items.length);};
-    document.getElementById(dotsId).appendChild(dot);
-  });
-  return setInterval(()=>{
-    idxRef.val=(idxRef.val+1)%items.length;
-    goHeroTo(trackId,dotsId,idxRef.val,timerRef,idxRef,items.length);
-  },4000);
-}
-function goHeroTo(trackId,dotsId,i){
-  document.getElementById(trackId).style.transform=`translateX(-${i*100}%)`;
-  document.querySelectorAll(`#${dotsId} .hero-dot`).forEach((d,idx)=>d.classList.toggle("active",idx===i));
-}
-
-// ── SECTION NAV ──
-function showSection(name){
-  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
-  document.querySelectorAll(".bnav").forEach(b=>b.classList.remove("active"));
-  document.getElementById("sec-"+name).classList.add("active");
-  const bn=document.getElementById("bn-"+name);
-  if(bn) bn.classList.add("active");
-  if(name==="schedule"&&!scheduleLoaded) loadSchedule();
-  if(name==="donghua"&&!dhLoaded){ dhLoaded=true; loadDonghuaSection(); }
-  if(name==="home") renderCW();
-}
-function goSearch(){ showSection("search"); setTimeout(()=>document.getElementById("s-input").focus(),100); }
-
-// ══ BERANDA ══
-async function loadHome(){
-  try{
-    const [homeData,newData]=await Promise.all([
-      apiGet(DH_API,{cmd:"home"}),
-      apiGet(DH_API,{cmd:"new-series",page:1})
-    ]);
-    const pop=homeData.popular_series||[];
-
-    // Hero
-    if(pop.length){
-      const idxRef={val:0};
-      homeHeroTimer=buildHero("home-hero-track","home-hero-dots",pop.slice(0,8),homeHeroTimer,idxRef,
-        i=>openDetail(encodeURIComponent(slug(i.url))));
-    }
-
-    renderEpScroll(document.getElementById("home-latest"),homeData.latest_episodes||[],"watch");
-    renderPopular(pop);
-
-    const kw=["perfect","immortal","heaven","god","spirit","dragon","sword","martial","dao","cultivat","divine","soul","battle","renegade","tales","coiling"];
-    const fan=(homeData.latest_episodes||[]).filter(i=>kw.some(k=>i.title.toLowerCase().includes(k))).slice(0,9);
-    renderGrid3(document.getElementById("home-fantasy"),fan.length?fan:(homeData.latest_episodes||[]).slice(0,9));
-    renderEpScroll(document.getElementById("home-new"),(newData.result||[]).slice(0,12));
-  }catch(e){ document.getElementById("home-latest").innerHTML=`<div class="empty">Gagal memuat</div>`; }
-  renderCW();
-}
-
-// ══ DONGHUA SECTION ══
-async function loadDonghuaSection(){
-  try{
-    const [homeData,todayData]=await Promise.all([
-      apiGet(DH_API,{cmd:"home"}),
-      apiGet(DH_API,{cmd:"schedule"})
-    ]);
-    const pop=homeData.popular_series||[];
-
-    // Hero
-    if(pop.length){
-      const idxRef={val:0};
-      dhHeroTimer=buildHero("dh-hero-track","dh-hero-dots",pop.slice(0,8),dhHeroTimer,idxRef,
-        i=>openDetail(encodeURIComponent(slug(i.url))));
-    }
-
-    renderEpScroll(document.getElementById("dh-latest"),homeData.latest_episodes||[],"watch");
-
-    // Today schedule
-    const todayMap=["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-    const todayName=todayMap[new Date().getDay()];
-    const sched=todayData.result||{};
-    const todayItems=sched[todayName]||[];
-    renderEpScroll(document.getElementById("dh-today"),todayItems.slice(0,12));
-  }catch{}
-  loadDHGrid();
-}
-
-async function loadDHGrid(){
-  const el=document.getElementById("dh-grid");
-  el.innerHTML=`<div class="loader" style="grid-column:1/-1"><div class="spinner"></div></div>`;
-  try{
-    const d=await apiGet(DH_API,{cmd:seriesMode==="new"?"new-series":"completed",page:seriesPage});
-    if(!d.result||!d.result.length){el.innerHTML=`<div class="empty" style="grid-column:1/-1">Tidak ada data</div>`;return;}
-    el.innerHTML=d.result.map(i=>gcHTML(i,"openDetail")).join("");
-    document.getElementById("dpage-prev").disabled=seriesPage<=1;
-    document.getElementById("dpage-next").disabled=!d.has_next;
-  }catch{el.innerHTML=`<div class="empty" style="grid-column:1/-1">⚠️ Gagal memuat</div>`;}
-}
-function switchSeries(mode){
-  seriesMode=mode; seriesPage=1;
-  document.getElementById("dtab-new").classList.toggle("active",mode==="new");
-  document.getElementById("dtab-done").classList.toggle("active",mode==="completed");
-  document.getElementById("dh-grid-title").textContent=mode==="new"?"Series Terbaru":"Series Tamat";
-  loadDHGrid();
-}
-function changeDPage(dir){ seriesPage=Math.max(1,seriesPage+dir); loadDHGrid(); document.getElementById("sec-donghua").scrollTop=0; }
-
-// ── RENDER HELPERS ──
-function renderEpScroll(el,items,mode){
-  mode = mode || "detail";
-  if(!items.length){el.innerHTML=`<div class="empty">Tidak ada data</div>`;return;}
-  el.innerHTML=items.map(i=>{
-    const clickFn = mode==="watch"
-      ? `openWatch('${encodeURIComponent(slug(i.url))}','${encodeURIComponent(i.seriesTitle||i.title)}','${encodeURIComponent(i.thumbnail||"")}')`
-      : `openDetail('${encodeURIComponent(slug(i.url))}')`;
-    return `
-    <div class="ep-card" onclick="${clickFn}">
-      <div class="ep-thumb-wrap">
-        <img class="ep-thumb" src="${IMG(i.thumbnail)}" onerror="this.style.background='#2a2a2a'" loading="lazy"/>
-        <div class="ep-new">NEW</div>
-        <div class="ep-overlay"><div class="ep-num">${i.episode||""}</div></div>
-      </div>
-      <div class="ep-title">${i.title}</div>
-    </div>`;
-  }).join("");
-}
-
-function renderGrid3(el,items){
-  if(!items.length){el.innerHTML=`<div class="empty" style="grid-column:1/-1">Tidak ada data</div>`;return;}
-  el.innerHTML=items.map(i=>gcHTML(i,"openDetail")).join("");
-}
-
-function gcHTML(i,fn){
-  const url=i.url||"";
-  return `<div class="gc" onclick="${fn}('${encodeURIComponent(slug(url))}')">
-    <div class="gc-wrap">
-      <img class="gc-img" src="${IMG(i.thumbnail||i.image)}" onerror="this.style.background='#2a2a2a'" loading="lazy"/>
-      <div class="gc-badge">${i.status||"NEW"}</div>
-      <div class="gc-overlay"><div class="gc-eps">${i.episode||""}</div></div>
-    </div>
-    <div class="gc-title">${i.title}</div>
-  </div>`;
-}
-
-function renderPopular(items){
-  const el=document.getElementById("home-popular");
-  if(!items.length){el.innerHTML="";return;}
-  el.innerHTML=items.map((i,idx)=>`
-    <div class="pop-item" onclick="openDetail('${encodeURIComponent(slug(i.url))}')">
-      <span class="pop-rank ${idx<3?'t':''}">${String(idx+1).padStart(2,"0")}</span>
-      <img class="pop-img" src="${IMG(i.thumbnail)}" onerror="this.style.background='#2a2a2a'" loading="lazy"/>
-      <div class="pop-info">
-        <div class="pop-title">${i.title}</div>
-        <div class="pop-meta"><span class="pop-tag on">ONGOING</span><span class="pop-ep">Donghua</span></div>
-      </div>
-    </div>`).join("");
-}
-
-// ── SEARCH ──
-document.getElementById("s-input").addEventListener("keydown",e=>{if(e.key==="Enter")doSearch();});
-async function doSearch(){
-  const q=document.getElementById("s-input").value.trim(); if(!q) return;
-  const el=document.getElementById("search-results");
-  el.innerHTML=`<div class="loader"><div class="spinner"></div><div class="ldr-txt">Mencari "${q}"...</div></div>`;
-  try{
-    const d=await apiGet(DH_API,{cmd:"search",query:q});
-    if(!d.result||!d.result.length){el.innerHTML=`<div class="empty"><div class="empty-ico">🔍</div>Tidak ada hasil</div>`;return;}
-    el.innerHTML=`<div class="grid3" style="padding-top:8px">${d.result.map(i=>gcHTML(i,"openDetail")).join("")}</div>`;
-  }catch{el.innerHTML=`<div class="empty"><div class="empty-ico">⚠️</div>Gagal mencari</div>`;}
-}
-
-// ── SCHEDULE ──
-async function loadSchedule(){
-  scheduleLoaded=true;
-  try{
-    const d=await apiGet(DH_API,{cmd:"schedule"});
-    scheduleData=d.result||{};
-    const days=Object.keys(scheduleData);
-    if(!days.length){document.getElementById("sch-grid").innerHTML=`<div class="empty" style="grid-column:1/-1">Tidak ada jadwal</div>`;return;}
-    const todayMap=["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-    const todayName=todayMap[new Date().getDay()];
-    currentDay=days.includes(todayName)?todayName:days[0];
-    document.getElementById("day-tabs").innerHTML=days.map(day=>`
-      <button class="day-tab ${day===currentDay?'active':''}" onclick="switchDay('${day}')">${day}</button>`).join("");
-    renderSchDay(currentDay);
-  }catch{document.getElementById("sch-grid").innerHTML=`<div class="empty" style="grid-column:1/-1">⚠️ Gagal</div>`;}
-}
-function switchDay(day){
-  currentDay=day;
-  document.querySelectorAll(".day-tab").forEach(b=>b.classList.toggle("active",b.textContent===day));
-  renderSchDay(day);
-}
-function renderSchDay(day){
-  const items=scheduleData[day]||[];
-  const el=document.getElementById("sch-grid");
-  if(!items.length){el.innerHTML=`<div class="empty" style="grid-column:1/-1">Tidak ada</div>`;return;}
-  el.innerHTML=items.map(i=>gcHTML(i,"openDetail")).join("");
-}
-
-// ── DONGHUA DETAIL ──
-async function openDetail(encodedSlug){
-  const s=decodeURIComponent(encodedSlug);
-  const page=document.getElementById("detail-page");
-  const body=document.getElementById("dp-body");
-  document.getElementById("dp-back-title").textContent=s;
-  body.innerHTML=`<div class="loader" style="padding:60px"><div class="spinner"></div><div class="ldr-txt">Memuat...</div></div>`;
-  page.classList.add("open"); document.body.style.overflow="hidden";
-  try{
-    const d=await apiGet(DH_API,{cmd:"detail",slug:s});
-    if(d.error){body.innerHTML=`<div class="empty"><div class="empty-ico">😞</div>${d.error}</div>`;return;}
-    document.getElementById("dp-back-title").textContent=d.title;
-    const eps=d.result||[];
-    body.innerHTML=`
-      <div class="dp-banner"><img class="dp-banner-img" src="${IMG(d.poster)}" onerror="this.style.display='none'"/></div>
-      <div class="dp-content">
-        <div class="dp-row">
-          <img class="dp-poster" src="${IMG(d.poster)}" onerror="this.style.background='#2a2a2a'"/>
-          <div class="dp-meta">
-            <div class="dp-title">${d.title}</div>
-            <div class="dp-tags">${(d.genres||[]).slice(0,4).map(g=>`<span class="dp-tag">${g}</span>`).join("")}</div>
-            <div class="dp-stats">
-              ${d.rating?`<div class="dp-stat">⭐ <strong>${d.rating}</strong></div>`:""}
-              ${d.status?`<div class="dp-stat">📺 <strong>${d.status}</strong></div>`:""}
-              ${d.total_episodes?`<div class="dp-stat">🎬 <strong>${d.total_episodes} Ep</strong></div>`:""}
+        <!-- MODEL SELECTOR DROPDOWN -->
+        <div class="model-selector-wrapper" id="modelSelectorWrapper">
+            <div class="model-trigger" id="modelTrigger" onclick="toggleDropdown()">
+                <span class="selected-icon" id="selectedIcon">🧠</span>
+                <div class="selected-info">
+                    <span class="selected-name" id="selectedName">GPT-5.5</span>
+                    <span class="selected-provider" id="selectedProvider">openai</span>
+                </div>
+                <span class="chevron">▼</span>
             </div>
-          </div>
+            <div class="model-dropdown" id="modelDropdown">
+                <div class="dropdown-header">
+                    <button class="tab-btn active" data-tab="chat" onclick="switchTab('chat', this)">💬 Chat</button>
+                    <button class="tab-btn" data-tab="image" onclick="switchTab('image', this)">🖼️ Image</button>
+                    <button class="tab-btn" data-tab="video" onclick="switchTab('video', this)">🎬 Video</button>
+                </div>
+                <input type="text" class="search-box" id="searchModel" placeholder="🔍 Cari model..." oninput="filterModels()">
+                <div class="model-list-scroll" id="modelListScroll">
+                    <div class="no-results">⏳ Memuat model...</div>
+                </div>
+            </div>
         </div>
-        ${d.synopsis?`<div class="dp-synopsis">${d.synopsis}</div>`:""}
-        <div class="ep-list-hd">Daftar Episode <span>(${eps.length})</span></div>
-        <div class="ep-list">
-          ${eps.map(e=>`
-            <div class="ep-row" onclick="openWatch('${encodeURIComponent(slug(e.url))}','${encodeURIComponent(d.title)}','${encodeURIComponent(d.poster||"")}')">
-              <span class="ep-row-num">Ep ${e.episode}</span>
-              <span class="ep-row-title">${e.title||d.title}</span>
-              <span class="ep-row-date">${e.release_date||""}</span>
-              <span class="ep-row-arr">›</span>
-            </div>`).join("")}
+
+        <div class="chat-area" id="chatArea">
+            <div class="empty">✨ Tanyakan apapun ke 53 model AI...</div>
         </div>
-      </div>`;
-  }catch{body.innerHTML=`<div class="empty"><div class="empty-ico">⚠️</div>Gagal memuat</div>`;}
-}
-function closeDetail(){ document.getElementById("detail-page").classList.remove("open"); document.body.style.overflow=""; }
 
+        <div class="input-row">
+            <textarea id="promptInput" placeholder="Ketik prompt..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
+            <button class="btn-send" id="sendBtn" onclick="sendChat()">Kirim</button>
+        </div>
 
-// ── DONGHUA WATCH ──
-async function openWatch(encodedSlug, encodedSeries, encodedThumb){
-  const s=decodeURIComponent(encodedSlug);
-  const seriesTitle=encodedSeries?decodeURIComponent(encodedSeries):"";
-  const thumb=encodedThumb?decodeURIComponent(encodedThumb):"";
-  const page=document.getElementById("watch-page");
-  document.getElementById("wp-back-title").textContent=s;
-  document.getElementById("wp-ep-title").textContent="";
-  document.getElementById("wp-series-title").textContent=seriesTitle;
-  document.getElementById("player-frame").src="";
-  document.getElementById("srv-list").innerHTML=`<div class="loader" style="width:100%"><div class="spinner"></div></div>`;
-  page.classList.add("open");
-  try{
-    const d=await apiGet(DH_API,{cmd:"watch",slug:s});
-    watchData=d;
-    document.getElementById("wp-back-title").textContent=d.title;
-    document.getElementById("wp-ep-title").textContent=d.title;
-    const isValidUrl=u=>typeof u==="string"&&/^https?:\/\//i.test(u.trim());
-    const url=isValidUrl(d.video_url)?d.video_url:(d.servers||[]).map(s=>s.url).find(isValidUrl);
-    if(url) document.getElementById("player-frame").src=url;
-    else document.getElementById("player-frame").src="";
-    const allSrv=[];
-    if(isValidUrl(d.video_url)) allSrv.push({name:"Default",url:d.video_url});
-    (d.servers||[]).forEach(sv=>{if(isValidUrl(sv.url)&&sv.url!==d.video_url) allSrv.push(sv);});
-    const sl=document.getElementById("srv-list");
-    sl.innerHTML=allSrv.length
-      ?allSrv.map((sv,i)=>`<button class="srv-btn ${(sv.url===url)?'active':''}" onclick="switchSrv(this,'${encodeURIComponent(sv.url)}')">${sv.name||"Mirror "+(i+1)}</button>`).join("")
-      :`<div style="color:var(--muted);font-size:12px">⚠️ Tidak ada mirror yang tersedia untuk episode ini</div>`;
-    document.getElementById("btn-prev-ep").disabled=!d.prev_episode;
-    document.getElementById("btn-next-ep").disabled=!d.next_episode;
-    if(seriesTitle) addHist(s,d.title,seriesTitle,thumb);
-  }catch{
-    document.getElementById("srv-list").innerHTML=`<div style="color:var(--muted);font-size:12px;padding:8px">⚠️ Gagal memuat player</div>`;
-  }
-}
+        <div class="footer">
+            <div class="dot"></div>
+            <span id="statusText">Online · Siap digunakan</span>
+        </div>
+    </div>
 
-function switchSrv(btn,encodedUrl){
-  document.querySelectorAll(".srv-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  document.getElementById("player-frame").src=decodeURIComponent(encodedUrl);
-}
-function navEp(dir){
-  if(!watchData) return;
-  const url=dir==="next"?watchData.next_episode:watchData.prev_episode;
-  if(url) openWatch(encodeURIComponent(slug(url)));
-}
-function closeWatch(){
-  document.getElementById("watch-page").classList.remove("open");
-  document.getElementById("player-frame").src="";
-  watchData=null; renderCW();
-}
+    <script>
+        // === STATE ===
+        const ALL_MODELS = [
+            // CHAT MODELS (24)
+            { id: 'openai/gpt-5.5', name: 'GPT-5.5', provider: 'openai', category: 'chat', icon: '🧠', tags: ['vision','pdf','web','code'] },
+            { id: 'openai/gpt-5.4', name: 'GPT-5.4', provider: 'openai', category: 'chat', icon: '🧠', tags: ['vision','pdf','web','code'] },
+            { id: 'openai/gpt-5.3', name: 'GPT-5.3', provider: 'openai', category: 'chat', icon: '🧠', tags: ['vision','pdf','web','code'] },
+            { id: 'openai/gpt-5.1', name: 'GPT-5.1', provider: 'openai', category: 'chat', icon: '🧠', tags: ['vision','pdf','web','code'] },
+            { id: 'openai/gpt-5', name: 'GPT-5', provider: 'openai', category: 'chat', icon: '🧠', tags: ['vision','pdf','web','code'] },
+            { id: 'openai/gpt-4o', name: 'GPT-4o', provider: 'openai', category: 'chat', icon: '🧠', tags: ['vision','pdf','web','code'] },
+            { id: 'openai/gpt-4o-mini', name: 'GPT-4o Mini', provider: 'openai', category: 'chat', icon: '🧠', tags: ['vision','code'] },
+            { id: 'anthropic/claude-opus-4.8', name: 'Claude Opus 4.8', provider: 'anthropic', category: 'chat', icon: '🎭', tags: ['vision','pdf','code','reasoning'] },
+            { id: 'anthropic/claude-opus-4.5', name: 'Claude Opus 4.5', provider: 'anthropic', category: 'chat', icon: '🎭', tags: ['vision','pdf','code','reasoning'] },
+            { id: 'anthropic/claude-fable-5', name: 'Claude Fable 5', provider: 'anthropic', category: 'chat', icon: '🎭', tags: ['vision','code','reasoning'] },
+            { id: 'deepseek/deepseek-v4-pro', name: 'DeepSeek V4 Pro', provider: 'deepseek', category: 'chat', icon: '🔍', tags: ['code','reasoning'] },
+            { id: 'deepseek/deepseek-v4-flash', name: 'DeepSeek V4 Flash', provider: 'deepseek', category: 'chat', icon: '🔍', tags: ['code','reasoning'] },
+            { id: 'deepseek/deepseek-v3.2-think', name: 'DeepSeek V3.2 Think', provider: 'deepseek', category: 'chat', icon: '🔍', tags: ['code','reasoning'] },
+            { id: 'google/gemini-3.1-pro', name: 'Gemini 3.1 Pro', provider: 'google', category: 'chat', icon: '💎', tags: ['vision','pdf','web','code'] },
+            { id: 'google/gemini-3.1-flash-lite', name: 'Gemini Flash Lite', provider: 'google', category: 'chat', icon: '💎', tags: ['vision','web','code'] },
+            { id: 'xai/grok-4.1', name: 'Grok 4.1', provider: 'xai', category: 'chat', icon: '⚡', tags: ['vision','code'] },
+            { id: 'qwen/qwen3-max', name: 'Qwen3 Max', provider: 'qwen', category: 'chat', icon: '🌊', tags: ['vision','code','reasoning'] },
+            { id: 'meta/llama-4', name: 'Llama 4', provider: 'meta', category: 'chat', icon: '🦙', tags: ['vision','code'] },
+            { id: 'moonshot/kimi', name: 'Kimi', provider: 'moonshot', category: 'chat', icon: '🚀', tags: ['vision','web'] },
+            { id: 'mistral/mistral-large', name: 'Mistral Large', provider: 'mistral', category: 'chat', icon: '🌪️', tags: ['code','reasoning'] },
+            { id: 'cohere/command-r-plus', name: 'Command R+', provider: 'cohere', category: 'chat', icon: '🎯', tags: ['web','code'] },
+            { id: 'ai21/jamba-1.5', name: 'Jamba 1.5', provider: 'ai21', category: 'chat', icon: '🎷', tags: ['code'] },
+            { id: 'reka/reka-core', name: 'Reka Core', provider: 'reka', category: 'chat', icon: '🔄', tags: ['vision','code'] },
+            { id: 'perplexity/sonar-pro', name: 'Sonar Pro', provider: 'perplexity', category: 'chat', icon: '📡', tags: ['web','search'] },
+            // IMAGE MODELS (9)
+            { id: 'flux/flux-pro', name: 'Flux Pro', provider: 'flux', category: 'image', icon: '🎨', tags: ['image'] },
+            { id: 'google/imagen-4.0', name: 'Imagen 4.0', provider: 'google', category: 'image', icon: '🎨', tags: ['image'] },
+            { id: 'openai/gpt-image', name: 'GPT Image', provider: 'openai', category: 'image', icon: '🎨', tags: ['image'] },
+            { id: 'xai/grok-imagine', name: 'Grok Imagine', provider: 'xai', category: 'image', icon: '🎨', tags: ['image'] },
+            { id: 'recraft/recraft-v4', name: 'Recraft V4', provider: 'recraft', category: 'image', icon: '🎨', tags: ['image'] },
+            { id: 'stability/stable-diffusion-3', name: 'Stable Diffusion 3', provider: 'stability', category: 'image', icon: '🎨', tags: ['image'] },
+            { id: 'midjourney/midjourney-v7', name: 'Midjourney V7', provider: 'midjourney', category: 'image', icon: '🎨', tags: ['image'] },
+            { id: 'leonardo/leonardo-ai', name: 'Leonardo AI', provider: 'leonardo', category: 'image', icon: '🎨', tags: ['image'] },
+            { id: 'playground/playground-v3', name: 'Playground V3', provider: 'playground', category: 'image', icon: '🎨', tags: ['image'] },
+            // VIDEO MODELS (10)
+            { id: 'kling/kling', name: 'Kling', provider: 'kling', category: 'video', icon: '🎬', tags: ['video'] },
+            { id: 'google/veo-3.1', name: 'Veo 3.1', provider: 'google', category: 'video', icon: '🎬', tags: ['video'] },
+            { id: 'openai/seedance', name: 'Seedance', provider: 'openai', category: 'video', icon: '🎬', tags: ['video'] },
+            { id: 'alibaba/wan', name: 'Wan', provider: 'alibaba', category: 'video', icon: '🎬', tags: ['video'] },
+            { id: 'runway/gen-4', name: 'Runway Gen-4', provider: 'runway', category: 'video', icon: '🎬', tags: ['video'] },
+            { id: 'pika/pika-2', name: 'Pika 2', provider: 'pika', category: 'video', icon: '🎬', tags: ['video'] },
+            { id: 'luma/dream-machine', name: 'Dream Machine', provider: 'luma', category: 'video', icon: '🎬', tags: ['video'] },
+            { id: 'haiper/haiper-v2', name: 'Haiper V2', provider: 'haiper', category: 'video', icon: '🎬', tags: ['video'] },
+            { id: 'moonvalley/moonvalley', name: 'Moonvalley', provider: 'moonvalley', category: 'video', icon: '🎬', tags: ['video'] },
+            { id: 'deforum/deforum', name: 'Deforum', provider: 'deforum', category: 'video', icon: '🎬', tags: ['video'] }
+        ];
 
-loadHome();
-</script>
+        let selectedModel = ALL_MODELS[0];
+        let currentTab = 'chat';
+        let firstMsg = true;
+
+        const chatArea = document.getElementById('chatArea');
+        const promptInput = document.getElementById('promptInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const statusText = document.getElementById('statusText');
+        const searchInput = document.getElementById('searchModel');
+        const modelListScroll = document.getElementById('modelListScroll');
+        const modelDropdown = document.getElementById('modelDropdown');
+        const modelTrigger = document.getElementById('modelTrigger');
+
+        // === INIT ===
+        function init() {
+            renderModelList();
+            updateSelectedDisplay();
+        }
+
+        function updateSelectedDisplay() {
+            document.getElementById('selectedIcon').textContent = selectedModel.icon;
+            document.getElementById('selectedName').textContent = selectedModel.name;
+            document.getElementById('selectedProvider').textContent = selectedModel.provider;
+        }
+
+        function toggleDropdown() {
+            const isOpen = modelDropdown.classList.contains('show');
+            if (isOpen) {
+                modelDropdown.classList.remove('show');
+                modelTrigger.classList.remove('open');
+            } else {
+                modelDropdown.classList.add('show');
+                modelTrigger.classList.add('open');
+                searchInput.value = '';
+                filterModels();
+                searchInput.focus();
+            }
+        }
+
+        function switchTab(tab, btn) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            searchInput.value = '';
+            filterModels();
+        }
+
+        function filterModels() {
+            const query = searchInput.value.toLowerCase();
+            const filtered = ALL_MODELS.filter(m => {
+                const matchCat = m.category === currentTab;
+                const matchSearch = !query || 
+                    m.name.toLowerCase().includes(query) || 
+                    m.provider.toLowerCase().includes(query) ||
+                    m.id.toLowerCase().includes(query) ||
+                    m.tags.some(t => t.includes(query));
+                return matchCat && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                modelListScroll.innerHTML = '<div class="no-results">😕 Tidak ada model ditemukan</div>';
+            } else {
+                modelListScroll.innerHTML = filtered.map(m => `
+                    <div class="model-option ${m.id === selectedModel.id ? 'selected' : ''}" 
+                         onclick="selectModel('${m.id}')">
+                        <span class="opt-icon">${m.icon}</span>
+                        <div class="opt-info">
+                            <span class="opt-name">${m.name}</span>
+                            <span class="opt-meta">
+                                <span>${m.provider}</span>
+                                ${m.tags.map(t => `<span class="opt-tag">${t}</span>`).join('')}
+                            </span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function selectModel(id) {
+            const found = ALL_MODELS.find(m => m.id === id);
+            if (found) {
+                selectedModel = found;
+                updateSelectedDisplay();
+                modelDropdown.classList.remove('show');
+                modelTrigger.classList.remove('open');
+                renderModelList();
+            }
+        }
+
+        function renderModelList() {
+            filterModels();
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const wrapper = document.getElementById('modelSelectorWrapper');
+            if (!wrapper.contains(e.target)) {
+                modelDropdown.classList.remove('show');
+                modelTrigger.classList.remove('open');
+            }
+        });
+
+        // === CHAT ===
+        async function sendChat() {
+            const prompt = promptInput.value.trim();
+            if (!prompt) return;
+
+            if (firstMsg) {
+                chatArea.innerHTML = '';
+                firstMsg = false;
+            }
+
+            // Add user message
+            chatArea.insertAdjacentHTML('beforeend', `
+                <div class="msg user">
+                    <div class="bubble">${escapeHtml(prompt)}</div>
+                </div>
+            `);
+
+            // Add loading
+            const loadingId = 'loading-' + Date.now();
+            chatArea.insertAdjacentHTML('beforeend', `
+                <div class="msg ai" id="${loadingId}">
+                    <div class="tag">${selectedModel.icon} ${selectedModel.name}</div>
+                    <div class="bubble">
+                        <div class="loading-row">
+                            <div class="dot-pulse"></div>
+                            <span>Berpikir...</span>
+                        </div>
+                    </div>
+                </div>
+            `);
+
+            promptInput.value = '';
+            sendBtn.disabled = true;
+            statusText.textContent = 'Mengirim...';
+            chatArea.scrollTop = chatArea.scrollHeight;
+
+            try {
+                const res = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt, model: selectedModel.id })
+                });
+                const data = await res.json();
+
+                const loadingEl = document.getElementById(loadingId);
+                if (loadingEl) {
+                    if (data.response) {
+                        loadingEl.innerHTML = `
+                            <div class="tag">${selectedModel.icon} ${selectedModel.name}</div>
+                            <div class="bubble">${escapeHtml(data.response)}</div>
+                        `;
+                        statusText.textContent = 'Online · Siap digunakan';
+                    } else {
+                        loadingEl.innerHTML = `
+                            <div class="tag">${selectedModel.icon} ${selectedModel.name}</div>
+                            <div class="bubble" style="color:#f87171;">❌ ${escapeHtml(data.error || 'Gagal mendapatkan response')}</div>
+                        `;
+                        statusText.textContent = 'Error · Coba lagi';
+                    }
+                }
+            } catch (e) {
+                const loadingEl = document.getElementById(loadingId);
+                if (loadingEl) {
+                    loadingEl.innerHTML = `
+                        <div class="bubble" style="color:#f87171;">❌ ${escapeHtml(e.message)}</div>
+                    `;
+                }
+                statusText.textContent = 'Error · Koneksi gagal';
+            }
+
+            sendBtn.disabled = false;
+            promptInput.focus();
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // === KEYBOARD SHORTCUT ===
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                modelDropdown.classList.remove('show');
+                modelTrigger.classList.remove('open');
+            }
+        });
+
+        // === INIT ===
+        init();
+    </script>
 </body>
 </html>
