@@ -1,13 +1,13 @@
 {
-  "name": "hidaka-stream",
+  "name": "oxyx-ai",
   "version": "1.0.0",
-  "description": "Donghua Streaming Web by Xiao ye for Alan tampan",
-  "main": "api/donghub.js",
+  "type": "module",
   "scripts": {
-    "start": "node api/donghub.js"
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
   },
-  "dependencies": {
-    "axios": "^1.6.0",
-    "cheerio": "^1.0.0-rc.12"
+  "dependencies": {},
+  "devDependencies": {
+    "vercel": "^latest"
   }
 }
