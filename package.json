@@ -1,13 +1,5 @@
 {
   "name": "oxyx-ai",
   "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vercel dev",
-    "deploy": "vercel --prod"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "vercel": "^latest"
-  }
+  "type": "module"
 }
